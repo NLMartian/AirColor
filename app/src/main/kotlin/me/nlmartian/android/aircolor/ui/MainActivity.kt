@@ -1,13 +1,16 @@
 package me.nlmartian.android.aircolor.ui
 
 import android.app.Activity
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
 import android.support.v7.app.ActionBarActivity
+import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.Toast
+import com.pawegio.kandroid.find
 import me.nlmartian.android.aircolor.ui.NavigationDrawerFragment
 import me.nlmartian.android.aircolor.R
 import me.nlmartian.android.aircolor.data.AqiClient
@@ -20,7 +23,7 @@ public class MainActivity : ActionBarActivity(), NavigationDrawerFragment.Naviga
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    private var mNavigationDrawerFragment: NavigationDrawerFragment? = null
+//    private var mNavigationDrawerFragment: NavigationDrawerFragment? = null
 
     /**
      * Used to store the last screen title. For use in [.restoreActionBar].
@@ -31,11 +34,21 @@ public class MainActivity : ActionBarActivity(), NavigationDrawerFragment.Naviga
         super<ActionBarActivity>.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mNavigationDrawerFragment = getSupportFragmentManager().findFragmentById(R.id.navigation_drawer) as NavigationDrawerFragment
-        mTitle = getTitle()
+        val toolbar = find<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+//        mNavigationDrawerFragment = getSupportFragmentManager().findFragmentById(R.id.navigation_drawer) as NavigationDrawerFragment
+        val color = getResources().getColor(R.color.light_blue)
+        getSupportActionBar().setBackgroundDrawable(ColorDrawable(color))
+        getWindow().setStatusBarColor(color)
 
         // Set up the drawer.
-        mNavigationDrawerFragment!!.setUp(R.id.navigation_drawer, findViewById(R.id.drawer_layout) as DrawerLayout)
+//        mNavigationDrawerFragment!!.setUp(R.id.navigation_drawer, findViewById(R.id.drawer_layout) as DrawerLayout)
+
+        val fragmentManager = getSupportFragmentManager()
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, CityDetailFragment.newInstance())
+                .commit()
     }
 
     override fun onNavigationDrawerItemSelected(position: Int) {
@@ -54,20 +67,7 @@ public class MainActivity : ActionBarActivity(), NavigationDrawerFragment.Naviga
         }
     }
 
-    public fun restoreActionBar() {
-        val actionBar = getSupportActionBar()
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD)
-        actionBar.setDisplayShowTitleEnabled(true)
-        actionBar.setTitle(mTitle)
-    }
-
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (!mNavigationDrawerFragment!!.isDrawerOpen()) {
-            getMenuInflater().inflate(R.menu.menu_main, menu)
-            restoreActionBar()
-            return true
-        }
         return super<ActionBarActivity>.onCreateOptionsMenu(menu)
     }
 
@@ -81,40 +81,4 @@ public class MainActivity : ActionBarActivity(), NavigationDrawerFragment.Naviga
 
         return super<ActionBarActivity>.onOptionsItemSelected(item)
     }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public class PlaceholderFragment : Fragment() {
-
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-            val rootView = inflater.inflate(R.layout.fragment_main, container, false)
-
-
-
-            return rootView
-        }
-
-        override fun onAttach(activity: Activity) {
-            super.onAttach(activity)
-            (activity as MainActivity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER))
-        }
-
-        companion object {
-            private val ARG_SECTION_NUMBER = "section_number"
-
-            /**
-             * Returns a new instance of this fragment for the given section
-             * number.
-             */
-            public fun newInstance(sectionNumber: Int): PlaceholderFragment {
-                val fragment = PlaceholderFragment()
-                val args = Bundle()
-                args.putInt(ARG_SECTION_NUMBER, sectionNumber)
-                fragment.setArguments(args)
-                return fragment
-            }
-        }
-    }
-
 }

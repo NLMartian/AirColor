@@ -14,5 +14,5 @@ data class PosAqi(
         var primary_pollutant: String,
         var quality: String,
         var station_code: String,
-        var time_point: String
+        var time_point: Date
 )

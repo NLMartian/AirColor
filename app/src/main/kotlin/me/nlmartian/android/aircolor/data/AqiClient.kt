@@ -1,11 +1,13 @@
 package me.nlmartian.android.aircolor.data
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import me.nlmartian.android.aircolor.data.api.AqiApi
 import retrofit.RequestInterceptor
 import retrofit.RestAdapter
 import retrofit.client.OkClient
 import retrofit.converter.GsonConverter
+import java.util.Date
 
 /**
  * Created by nlmartian on 4/18/15.
@@ -23,10 +25,14 @@ class AqiClient {
             }
         }
 
+        private val gson = GsonBuilder()
+                .registerTypeAdapter(javaClass<Date>(), DateAdapter())
+                .create()
+
         private val restAdapter = RestAdapter.Builder()
                 .setEndpoint(BASE_URL)
                 .setClient(OkClient())
-                .setConverter(GsonConverter(Gson()))
+                .setConverter(GsonConverter(gson))
                 .setRequestInterceptor(requestInterceptor)
                 .setLogLevel(RestAdapter.LogLevel.BASIC)
                 .build()
