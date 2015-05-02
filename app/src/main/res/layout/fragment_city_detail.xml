@@ -32,14 +32,15 @@
                 android:layout_height="wrap_content"
                 android:textSize="56sp"
                 android:textColor="@android:color/white"
-                android:text="_"
                 tools:text="230"/>
 
             <TextView
+                android:id="@+id/label_aqi"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textSize="8sp"
                 android:textColor="@android:color/white"
+                android:visibility="gone"
                 android:layout_gravity="top"
                 android:text="AQI"/>
 
